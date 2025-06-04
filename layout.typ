@@ -47,21 +47,12 @@
 
   // Formatting for regular text
   set par(justify: true, leading: 1em, first-line-indent: indent, spacing: 1em)
-  show heading: set block(spacing: 1.5em)
+  show heading: set block(spacing: 0.7em)
 
   set terms(separator: [ -- ])
 
   // Headings
   set heading(numbering: "1.1.")
-  show heading: it => {
-    if it.level == 1 {
-      text(12pt, align(center, upper(it)))
-    } else {
-      text(12pt, it)
-    }
-    ""
-    v(-1cm)
-  }
 
   // Start page numbering
   set page(numbering: "1", number-align: center)
@@ -190,7 +181,7 @@
   ) // TODO: make the same style as LaTeX: 1. | (a) | i. | A.
 
 
-  outline(depth: 3, indent: 1cm, title: text(size: 14pt, "SATURS"))
+  outline(depth: 3, indent: 1cm, title: text(size: 14pt, "Saturs"))
 
   body
 }
