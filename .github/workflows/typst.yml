@@ -25,7 +25,7 @@ jobs:
           cache-dependency-path: requirements.typ
       - name: Compile Typst files
         run: |
-          typst compile main.typ main.pdf
+          typst compile --font-path=assets/fonts main.typ quantum-computation-cheatsheet.pdf
       - name: Upload PDF file
         uses: actions/upload-artifact@v4
         with:
@@ -40,4 +40,4 @@ jobs:
         with:
           name: "${{ github.ref_name }} — ${{ env.DATE }}"
           files: |
-            main.pdf
+            quantum-computation-cheatsheet.pdf
