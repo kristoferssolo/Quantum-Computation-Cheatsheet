@@ -17,7 +17,7 @@
 #let CU = $lr(C-U)$
 #let QFT = $lr(Q F T)$
 
-= Bre-Ket Notation
+= Bra-Ket Notation
 == Ket $ket(psi)$
 Represents a column vector for a quantum state.
 $ ket(psi)=alpha ket(0)+beta ket(1) <==> vec(alpha, beta) $
@@ -107,7 +107,10 @@ $
 
 = Single Qubit Unitary Transformations
 Quantum gates are unitary matrices $U$.
-$ U U^dagger=U^dagger U=I $
+- Unitary condition: $U U^dagger=U^dagger U=I$, where $U^dagger$ is the
+  conjugate transpose.
+- Action on state $ket(psi')=U ket(psi)$
+
 === Properties
 
 Linearity
@@ -132,6 +135,7 @@ $
 
 === X (NOT)
 Bit flip
+#figure(quantum-circuit(..tq.build(tq.x(0))))
 $
   X=mat(0, 1; 1, 0) distance
   cases(
@@ -141,6 +145,7 @@ $
 $
 
 === Y Gate
+#figure(quantum-circuit(..tq.build(tq.y(0))))
 $
   Y=mat(0, -i; i, 0) distance
   cases(
@@ -151,6 +156,7 @@ $
 
 === Z Gate
 Phase flip
+#figure(quantum-circuit(..tq.build(tq.z(0))))
 $
   Z=mat(1, 0; 0, -1) distance
   cases(
@@ -161,6 +167,7 @@ $
 
 == Hadamard Gate ($H$)
 Creates superpositions
+#figure(quantum-circuit(..tq.build(tq.h(0))))
 $
   H=1/sqrt(2) mat(1, 1; 1, -1) distance
   cases(
@@ -174,14 +181,18 @@ $
   H H=H^2=I
 $
 
+
 == Phase Gates
 === $S$ Gate $(sqrt(Z))$
+#figure(quantum-circuit(..tq.build(tq.s(0))))
 $ S= mat(1, 0; 0, i) distance S^2=Z $
 
 === $T$ Gate $(pi/8))$
+#figure(quantum-circuit(..tq.build(tq.t(0))))
 $ T= mat(1, 0; 0, e^(i pi/4)) distance T^2=S $
 
 == Rotation Gates ($R_n (theta)$)
+#figure(quantum-circuit(..tq.build(tq.rx($theta$, 0))))
 $
   R_x (theta)=
   e^((-i theta X)/2)=
@@ -191,6 +202,7 @@ $
   )
 $
 
+#figure(quantum-circuit(..tq.build(tq.ry($theta$, 0))))
 $
   R_y (theta)=
   e^((-i theta Y)/2)=
@@ -200,6 +212,7 @@ $
   )
 $
 
+#figure(quantum-circuit(..tq.build(tq.rz($theta$, 0))))
 $
   R_z (theta)=
   e^((-i theta Z)/2)=
@@ -264,10 +277,23 @@ $
 $
 === Entangled States
 Cannot be factored
+
 ==== Example
 $
   1/sqrt(2)(ket(00)+ket(11)) ("Bell state" ket(Phi^+))
 $
+
+#figure(quantum-circuit(
+  lstick($ket(0)$),
+  gate($H$),
+  ctrl(1),
+  1,
+  [\ ],
+  lstick($ket(0)$),
+  1,
+  targ(),
+  1,
+))
 
 == Multi-Qubit Measurement & Normalization
 Measure one qubit from a multi-qubit system.
@@ -333,7 +359,11 @@ $ CNOT ket(c) ket(t)=ket(c)ket(t tensor c) $
 
 === $SWAP$ Gate
 Swaps two qubits.
-#figure(quantum-circuit(..tq.build(tq.swap(0, 1))))
+#figure([
+  #quantum-circuit(..tq.build(tq.swap(0, 1)))
+  or
+  #quantum-circuit(..tq.build(tq.cx(0, 1), tq.cx(1, 0), tq.cx(0, 1)))
+])
 
 === Toffoli Gate ($CCNOT$)
 $ CCNOT ket(c_1 c_2 t)=ket(c_1 c_2 t tensor (c_1 dot c_2)) $
@@ -483,6 +513,10 @@ $
   (where $N=p q$, period $p$), then
   $ QFT_N ket(psi)=1/sqrt(p) sum_(k=0)^(p-1) c_k ket(k dot N/p) $ (Output is
   superposition of multiples of $N/p$).
+
+
+#figure(quantum-circuit(..tq.qft(3)))
+
 == Period Finding (Kvantu algoritms perioda atrašanai)
 - Problem: Given $f(x) = f(x+r)$, find period $r$. $N$ is size of domain.
 - Algorithm:
