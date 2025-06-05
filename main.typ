@@ -521,3 +521,62 @@ $
   + Measure first register to get string $y$ such that\ $y dot s = 0 (mod 2)$.
   + Repeat $n-1$ times to get $n-1$ linearly independent equations for $s$.
     Solve the system to find $s$.
+
+= Advanced Topics
+== Density Matrices (Blīvuma matricas $rho$)
+- Describes quantum states, including mixed states (statistical ensemble of pure states).
+- Pure state $ket(psi): rho=ket(psi)bra(psi)$.
+- Mixed state: $rho = sum_i p_i ket(psi_i)bra(psi_i)$, where $p_i$ are probabilities, $sum p_i = 1$.
+- Properties:
+  - $T r (rho)=1$.
+  - $rho^dagger=rho$ (Hermitian).
+  - $rho$ is positive semi-definite (eigenvalues $>=0$).
+- Evolution: $rho'=U rho U^dagger$.
+- Measurement: Probability of outcome $m: P(m) =T r(M_m^dagger M_m rho)$.
+  Post-measurement state: $(M_m rho M_m^dagger)/(T r (M_m rho M_m^dagger))$
+- Purity: $T r(rho)^2<=1$. $T r(rho)^2=1$ if $rho$ is a pure state.
+- Partial Trace ($T r_B$): If $rho_(A B)$ describes system $A B$,
+  $rho_A=T r_B(rho_(A B))$ describes system $A$.
+
+== Quantum Cryptography
+=== BB84 Protocol
++ Alice chooses random bits and random bases (rectilinear $+$ or diagonal
+  $times$) for each bit.
+  - $0 -->^+ ket(0), 1 -->^+ ket(1)$
+  - $0 -->^times ket(+), 1 -->^times ket(-)$
++ Alice sends qubits to Bob.
++ Bob chooses random bases to measure each qubit.
++ Alice and Bob publicly announce their basis choices.
+  They keep bits where bases matched (sifted key).
++ They sacrifice a portion of the sifted key to estimate error rate (detect
+  eavesdropping). If error rate is low, remaining bits form the secret key.
+
+=== Security
+Eavesdropping (Eve) introduces errors because she doesn't know Alice's bases and
+her measurements disturb the states.
+
+== Quantum Error Correction
+Protects quantum states from decoherence and errors.
+
+=== 3-Qubit Bit Flip Code
+- Encoding: $ket(0)->ket(0_L)=ket(000), ket(1)->ket(1_L)=ket(11)$.
+- Error detection: Measure stabilizers $Z_1 Z_2$, $Z_2 Z_3$.
+- Correction: If $Z_1 Z_2$ flips, error on $Q 1$ or $Q 2$.
+  If $Z_2 Z_3$ flips, error on $Q 2$ or $Q 3$.
+  (e.g., if $Z_1 Z_2 = -1$, $Z_2 Z_3 = +1 ==>$ error on $Q 1$, apply $X_1$).
+
+=== 3-Qubit Phase Flip Code
+- Encoding: $ket(0)->ket(+_L)=ket(+++)$,\ $ket(1)->ket(-_L)=ket(---)$.
+  (Hadamard basis of bit flip code).
+- Error detection: Measure stabilizers $X_1 X_2$, $X_2 X_3$.
+
+=== Shor's 9-Qubit Code
+Corrects arbitrary single-qubit errors (bit flips, phase flips, or both).
+Concatenates bit-flip and phase-flip codes.
+$
+  ket(0)->1/(2sqrt(2))(ket(000)+ket(111))(ket(000)+ket(111))(ket(000)+ket(111)) \
+  ket(1)->1/(2sqrt(2))(ket(000)-ket(111))(ket(000)-ket(111))(ket(000)-ket(111)) \
+$
+
+- Stabilizer Codes: A general framework for QEC. Code space is the simultaneous
+  $+1$ eigenspace of a set of commuting Pauli operators (stabilizers).
