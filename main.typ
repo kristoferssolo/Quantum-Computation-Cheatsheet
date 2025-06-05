@@ -348,3 +348,65 @@ $
   U_i ket(z_1 ... z_n)=ket(z_1 ... z_n)
 $
 ja $z_1 ... z_n != x_1 ...x_n$, $z_1 ... z_n != y_1 .. y_n$.
+
+= Key Quantum Protocols & Concepts
+== No-Cloning Theorem
+Impossible to create and identical copy of an arbitrary unknown quantum state.
+
+== Quantum Teleprotation
+Transmits $ket(psi)=a ket(0) + b ket(1)$ using an entangled pair
+$ket(Phi^+)_(A B)=1/sqrt(2)(ket(00)+ket(11))$ and $2$ classical bits.
+
+Initial state (Alice has $ket(psi)_C$ and qubit $A$, Bob has $B$):
+$
+  ket(psi)_C tensor ket(Phi^+)_(A B)= \ =
+  (a ket(0)_C+b ket(1)_C)1/sqrt(2)(ket(0_A 0_B)+ket(1_A 1_B))= \ =
+  a/sqrt(2)ket(000)+a/sqrt(2)ket(011)+b/sqrt(2)ket(100)+b/sqrt(2)
+$
+(qubits $C$, $A$, $B$)
+
+Alice applied $CNOT$ ($C$ is control, $A$ is target):
+$
+  a/sqrt(2) ket(000)+a/sqrt(2)ket(011)+b/sqrt(2)ket(110)+b/sqrt(2)ket(101)
+$
+
+Alice applies $H$ to qubit $C$:
+$
+  1/2[
+    a(ket(0)+ket(1))ket(11)+
+    a(ket(0)+ket(1))ket(11)+ \ +
+    b(ket(0)-ket(1))ket(10)+
+    b(ket(0)-ket(1))ket(01)
+  ]
+$
+
+Regroup by Alice's qubits $C A$:
+$
+  1/2[
+    ket(00)_(C A) (a ket(0) + b ket(1))+
+    ket(01)_(C A) (a ket(1) + b ket(0))+ \ +
+    ket(10)_(C A) (a ket(0) - b ket(1))+
+    ket(11)_(C A) (a ket(1) - b ket(0))
+  ]
+$
+
+Alice measures $C A$, sends 2 classical bits to Bob. Bob applies correction to
+his qubit $B$:
+- Alice gets $00 ==>$ Bob has $a ket(0)+b ket(1)$ (Needs $I$).
+- Alice gets $01 ==>$ Bob has $a ket(1)+b ket(0)$ (Needs $X$).
+- Alice gets $10 ==>$ Bob has $a ket(0)-b ket(1)$ (Needs $Z$).
+- Alice gets $11 ==>$ Bob has $a ket(1)-b ket(0)$ (Needs $Z X$).
+
+== Dense Coding (Bļīvā kodēšana)
+Sends 2 classical bits of information From Alice to Bob by sending only 1 qubit,
+using pre-shared entangled pair.
+=== Steps
++ Alice and Bob share $ket(Phi^+)_(A B)$
++ To send classical bits $x y$:
+  - $00$: Alice does nothing (applies $I$) to her qubit.
+  - $01$: Alice applies $X$ to her qubit.
+  - $10$: Alice applies $Z$ to her qubit.
+  - $11$: Alice applies $X$ then $Z$ (or $i Y$) to her qubit.
++ Alice sends her modified qubit to Bob.
++ Bob performs a Bell measurement on the two qubits he now possesses to recover
+  $x y$.
