@@ -11,6 +11,10 @@
 
 #let distance = $space.quad space.quad$
 #let tensor = $lr(times.circle)$
+#let CNOT = $lr(C N O T)$
+#let CCNOT = $lr(C C N O T)$
+#let SWAP = $lr(S W A P)$
+#let CU = $lr(C-U)$
 
 = Bre-Ket Notation
 == Ket $ket(psi)$
@@ -319,3 +323,28 @@ $
   ket(0)
 $
 
+= Quantum Logic Gates & Circuits
+== Common Multi-Qubit Gates
+
+=== $CNOT$ (Controlled-NOT)
+$ CNOT ket(c) ket(t)=ket(c)ket(t tensor c) $
+#figure(quantum-circuit(..tq.build(tq.cx(0, 1))))
+
+=== $SWAP$ Gate
+Swaps two qubits.
+#figure(quantum-circuit(..tq.build(tq.swap(0, 1))))
+
+=== Toffoli Gate ($CCNOT$)
+$ CCNOT ket(c_1 c_2 t)=ket(c_1 c_2 t tensor (c_1 dot c_2)) $
+#figure(quantum-circuit(..tq.build(tq.ccx(0, 1, 2))))
+
+=== Universality (Universalitāte)
+
+Jebkurai unitārai $U$: $U=U_m U_(m-1) ... U_1$, katra $U_i$ maina tikai 2 bāzes
+stāvokļus
+$
+  U_i ket(x_1 ... x_n)=a ket(x_1 ... x_n) + b ket(y_1 ... y_n) \
+  U_i ket(y_1 ... y_n)=c ket(x_1 ... x_n) + d ket(y_1 ... y_n) \
+  U_i ket(z_1 ... z_n)=ket(z_1 ... z_n)
+$
+ja $z_1 ... z_n != x_1 ...x_n$, $z_1 ... z_n != y_1 .. y_n$.
