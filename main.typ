@@ -10,6 +10,7 @@
 ))
 
 #let distance = $space.quad space.quad$
+#let tensor = $lr(times.circle)$
 
 = Bre-Ket Notation
 == Ket $ket(psi)$
@@ -92,7 +93,7 @@ $
   P(-)=abs(braket(-, 1))^2=1/2
 $
 
-=== Example: $ket(psi)=(1+2i)/sqrt(7)ket(0)+(1-i)/sqrt(7)ket(1)$
+==== Example: $ket(psi)=(1+2i)/sqrt(7)ket(0)+(1-i)/sqrt(7)ket(1)$
 $
   P(0) & =abs((1+2i)/sqrt(7))^2=(1^2+2^2)/7=5/7   \
   P(1) & =abs((1-i)/sqrt(7))^2=(1^2+(-1)^2)/7=2/7
@@ -227,3 +228,94 @@ $
     U ket(1) = ket(0)
   )
 $
+
+= Multi-Qubit Systems
+== Tensor product
+Combines state space.
+
+$
+  (a ket(0)+b ket(1)) tensor (c ket(0) + d ket(1)) = \ =
+  a c ket(00)+ a d ket(01) + b c ket(10) + b d ket(11)
+$
+
+For $k$ qubits, $2^k$ basis states.
+
+=== Operators
+$
+  (A tensor B)
+  (ket(psi_A) tensor ket(psi_B))=
+  (A ket(psi_A)) tensor (B ket(psi_B))
+$
+
+== Product States vs. Entangled States
+
+=== Product state
+Can be written as $ket(psi_A)tensor ket(psi_B)$.
+
+==== Example
+$
+  1/2(ket(00)+ket(01)+ket(10)+ket(11))= \ =
+  (1/sqrt(2)(ket(0)+ket(1))) tensor (1/sqrt(2)(ket(0)+ket(1)))
+$
+=== Entangled States
+Cannot be factored
+==== Example
+$
+  1/sqrt(2)(ket(00)+ket(11)) ("Bell state" ket(Phi^+))
+$
+
+== Multi-Qubit Measurement & Normalization
+Measure one qubit from a multi-qubit system.
+==== Example
+===== State
+$
+  a ket(00)+b ket(01) + c ket(10) + d ket(11)
+$
+===== Measure 1st qubit
+====== Prob of $0$
+$
+  P(q_1=0)=abs(a)^2+abs(b)^2
+$
+Post-measurement state:
+$
+  (a ket(00)+ b ket(01))/sqrt(abs(a)^2+abs(b)^2)=
+  ket(0) tensor
+  (a ket(0) + b ket(1))/(sqrt(abs(a)^2+abs(b)^2))
+$
+
+====== Prob of $1$
+$
+  P(q_1=1)=abs(c)^2+abs(d)^2
+$
+Post-measurement state:
+$
+  (c ket(10)+ d ket(11))/sqrt(abs(c)^2+abs(d)^2)=
+  ket(1) tensor
+  (c ket(0) + d ket(1))/(sqrt(abs(c)^2+abs(d)^2))
+$
+==== Example
+===== State
+$
+  2/3 ket(00)+1/3 ket(01)+2/3 ket(10)
+$
+===== Measure 1st qubit
+====== Prob of $0$
+$
+  P(0)=(2/3)^2+(1/3)^2=5/9
+$
+State of 2nd qubit:
+$
+  (2/3 ket(0) + 1/3 ket(1))/sqrt(5/9)=
+  1/sqrt(5)(2 ket(0) + ket(1))
+$
+
+====== Prob of $1$
+$
+  P(1)=(2/3)^2=4/9
+$
+State of 2nd qubit:
+$
+  (2/3 ket(0))/sqrt(4/9)=
+  ket(0)
+$
+
