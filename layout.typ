@@ -46,7 +46,7 @@
   show math.equation: set text(weight: 400)
 
   // Formatting for regular text
-  set par(justify: true, leading: 1em, first-line-indent: indent, spacing: 1em)
+  set par(justify: true, leading: 1em)
   show heading: set block(spacing: 0.7em)
 
   set terms(separator: [ -- ])
@@ -181,7 +181,7 @@
   ) // TODO: make the same style as LaTeX: 1. | (a) | i. | A.
 
 
-  outline(depth: 3, indent: 1cm, title: text(size: 14pt, "Saturs"))
+  outline(depth: 3, indent: indent, title: text(size: 14pt, "Saturs"))
 
   body
 }
