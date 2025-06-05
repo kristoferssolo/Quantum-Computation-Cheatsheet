@@ -48,6 +48,8 @@
   // Formatting for regular text
   set par(justify: true, leading: 1em)
   show heading: set block(spacing: 0.7em)
+  show heading: set text(size: 14pt)
+  show heading: set par(justify: false)
 
   set terms(separator: [ -- ])
 
