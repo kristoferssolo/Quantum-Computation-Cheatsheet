@@ -15,6 +15,7 @@
 #let CCNOT = $lr(C C N O T)$
 #let SWAP = $lr(S W A P)$
 #let CU = $lr(C-U)$
+#let QFT = $lr(Q F T)$
 
 = Bre-Ket Notation
 == Ket $ket(psi)$
@@ -410,3 +411,113 @@ using pre-shared entangled pair.
 + Alice sends her modified qubit to Bob.
 + Bob performs a Bell measurement on the two qubits he now possesses to recover
   $x y$.
+
+= Quantum Algorithms
+== Oracle ($U_f$)
+Black box for $f(x)$.
+
+$
+  U_f ket(x)ket(y)=ket(x)ket(y tensor f(x))
+$
+=== Phase kickback
+$
+  "If " ket(y)=ket(-)=1/sqrt(2)(ket(0)-ket(1)), "then"\
+  U_f ket(x)ket(-)=(-1)^(f(x))ket(x)ket(-)
+$
+
+== Deutsch's Algorithm
+- Problem: $f:{0,1}->{0,1}$ Constant or balanced? One query.
+- Task: Calculate $(f(0)+f(1))(mod 2)$.
+- Circuit:
+  $
+    ket(0)ket(1) stretch(->)^(H tensor H)
+    1/2 sum_x ket(x)(ket(0)-ket(1)) stretch(->)^(U_f) \ stretch(->)^(U_f)
+    1/2 sum_x (-1)^(f(x)) ket(x)(ket(0)-ket(1)) stretch(->)^(H tensor I) \
+    stretch(->)^(H tensor I)_"Result on 1st qubit:"
+    1/2 ((-1)^f(0)+(-1)^f(1))ket(0)+ \ +
+    1/2 ((-1)^f(0)-(-1)^f(1))ket(1)
+  $
+- Measure 1st qubit:
+  - If $f(0)=f(1)$ (constant), state is $plus.minus ket(0)$. \
+    Measure $0$. $(f(0)+f(1))(mod 2)=0$.
+  - If $f(0)!=f(1)$ (balanced), state is $plus.minus ket(1)$. \
+    Measure $1$. $(f(0)+f(1))(mod 2)=1$.
+
+== Grover's Search Algorithm
+- Problem: Find $x_w$ s.t. $f(x_w)=1$ (marked item) in $N=2^n$ items.
+- Oracle $O$: $O ket(x)=(-1)^f(x) ket(x)$.
+- Grover Diffusion Operator $D$ (Inversion about the mean):
+  $D = 2 ket(s)bra(s) - I$, where $ket(s) = H^(tensor n) ket(0)^(tensor n)$.
+- Grover Iteration: $G= D O$.
+- Algorithm:
+  + Start $ket(s)$.
+  + Repeat $G$ for $k$ iterations.
+    - 1 marked item $(L=1)$: $k approx pi/4 sqrt(N)$
+    - $L$ marked items: $k approx pi/4 sqrt(N/L)$
+  + Measure. High probability of marked item.
+- Geometric Interpretation:
+  Rotation in 2D plane spanned by $ket(s)$ and $ket(w)$ (superposition of marked
+  items). \
+  More precisely, plane spanned by $ket(Psi_1)=1/sqrt(L) sum_(x:f(x)=1) ket(x)$
+  and $ket(Psi_0)=1/sqrt(N-L) sum_(x:f(x)-0)ket(x)$. \
+  Initial state $ket(s)=sin alpha ket(Psi_1)+cos alpha ket(Psi_0)$, where
+  $sin alpha = sqrt(L/N)$. \
+  Oracle $O$ reflects about $ket(Psi_0)$. Diffusion $D$ reflects about $ket(s)$.
+  Each Iteration $G = D O$ rotates by $2alpha$. \
+  After $k$ iterations, angle with $ket(Psi_0)$ is $(2k+1)alpha$. \
+  Prob. of measuring a marked item: $sin^2((2k+1)alpha)$.
+- Unknown $L$: Iterative deepening: try iterations
+  $t=1,3,3^2,..., "up to" approx sqrt(N)$
+
+== Quantum Fourier Transform (QFT)
+- Definition: $ QFT_N ket(j)=1/sqrt(N) sum_(k=0)^(N-1) e^((2pi i j k)/N) ket(k) $
+  Let $omega_N=e^((2 pi i)/N)$.
+- Circuit: Uses $H$ and controlled-$R_m$ gates
+  ($ R_m = mat(
+    1, 0; 0,
+    e^((2pi
+    i)/2^m)
+  ) $), then $SWAP$s.
+- Property (Periodicity):
+  If input is periodic sum $ ket(psi)=1/sqrt(q) sum_(l=0)^(q-1) ket(a+l p) $
+  (where $N=p q$, period $p$), then
+  $ QFT_N ket(psi)=1/sqrt(p) sum_(k=0)^(p-1) c_k ket(k dot N/p) $ (Output is
+  superposition of multiples of $N/p$).
+== Period Finding (Kvantu algoritms perioda atrašanai)
+- Problem: Given $f(x) = f(x+r)$, find period $r$. $N$ is size of domain.
+- Algorithm:
+  + $
+      1/sqrt(N) sum_(x=0)^(N-1) ket(x)ket(0)->^U_f
+      1/sqrt(N) sum_(x=0)^(N-1) ket(x) ket(f(x))
+    $
+  + Measure 2nd register (gets some $y_0$).
+    1st register becomes
+    $
+      1/sqrt(M) sum_(k:f(k)=y_0) ket(k) approx
+      1/sqrt(N/r) sum_(j=0)^(N/r-1) ket(x_0 + j r)
+    $
+  + Apply $QFT_N$ to 1st register. Result is superposition of states $k dot N/r$.
+  + Measure 1st register. Get some value $m_j approx j dot N/r$.
+- Classical Post-processing:
+  If $N$ is a multiple of $r$: $m_j = j dot N/r$.
+  Find $r$ using $gcd(m_j, N)$ and continued fractions / Euclidean algorithm to
+  find $j/r$ from $m_j/N$.
+
+== Shor's Algorithm (Skaitļa sadalīšanai reizinātājos)
+- Reduces factoring $N$ to finding order $r$ of $a^x (mod N)$.
+  Uses Period Finding for $f(x)=a^x (mod N)$.
+- Order $r$ of $a^x (mod N)$: Smallest $r>0$ s.t. $a^r eq.triple 1 (mod N)$.
+
+== Simon's Algorithm
+
+- Problem: Given $f: {0,1}^n -> {0,1}^n$ such that
+  $f(x) = f(y)$ if $x plus.circle y = s$ for some secret string $s in {0,1}^n$ (or $x=y$, i.e., $s=0^n$). Find $s$.
+- Algorithm:
+  + Prepare $H^(tensor n) ket(0)^(tensor n)ket(0)^(tensor n)$.
+  + Apply: $U_f: 1/sqrt(2^n) sum_x ket(x) ket(f(x))$.
+  + Measure second register. First register collapses to
+    $1/sqrt(2)(ket(x_0)+ket(x_0 plus.circle s))$ for some $x_0$.
+  + Apply $H^(tensor n)$ to the first register.
+  + Measure first register to get string $y$ such that\ $y dot s = 0 (mod 2)$.
+  + Repeat $n-1$ times to get $n-1$ linearly independent equations for $s$.
+    Solve the system to find $s$.
